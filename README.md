@@ -1,5 +1,23 @@
-# WardFlow — Supabase separate-table version
+# WardFlow — Hospital Ward Management System
 
-Configure `supabase-config.js`, run `../SUPABASE_SCHEMA.sql` in Supabase SQL Editor, and follow `../README_STEP_BY_STEP.txt`.
+**Developer:** Saharsh W.
 
-Tables: patients, resources, assignments, preemptions, audit_logs. Each entity is stored as one row with its `id` and `data` JSONB. Public demo policies allow anonymous CRUD; fictional data only.
+## About
+WardFlow is a web-based hospital ward management project designed to manage patient registration, ward resources, patient-resource assignments, and emergency pre-emption records.
+
+## Technologies
+- HTML, CSS, JavaScript
+- Supabase (PostgreSQL)
+- Netlify (frontend hosting)
+
+## Features
+- Patient registration and management
+- Shared cloud database
+- Resource and assignment management
+- Activity logs
+
+## Setup
+See `README_STEP_BY_STEP.txt` for database setup and deployment instructions.
+
+## Disclaimer
+Academic demonstration project. Uses fictional patient data only.

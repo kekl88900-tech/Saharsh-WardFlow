@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WardFlow | Ward Management</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+<div class="brand">
+<span class="brandicon">✚</span>
+<div>
+<b>WardFlow</b>
+<small>EMERGENCY OPERATIONS</small>
+</div>
+</div>
+<div class="navlabel">OVERVIEW</div>
+<button class="nav active" data-page="dashboard">
+<i>▦</i> Command center</button>
+<button class="nav" data-page="patients">
+<i>♙</i> Patient queue <span id="navWaiting" class="navcount">0</span>
+</button>
+<button class="nav" data-page="resources">
+<i>▤</i> Resources</button>
+<button class="nav" data-page="assignments">
+<i>⇄</i> Assignments</button>
+<button class="nav" data-page="emergency">
+<i>⚠</i> Critical response</button>
+<div class="navlabel">RECORDS & ADMIN</div>
+<button class="nav" data-page="audit">
+<i>◷</i> Audit log</button>
+<button class="nav" data-page="reports">
+<i>▥</i> Reports & analytics</button>
+<button class="nav" data-page="settings">
+<i>⚙</i> Settings & backup</button>
+<div class="sidebottom">
+<span class="live">
+</span> Ward management<small>Academic project</small>
+</div>
+</aside>
+<main>
+<header class="topbar">
+<div class="topleft">
+<button class="iconbtn mobile" id="menuBtn">☰</button>
+<div>
+<small class="kicker">EMERGENCY WARD / OPERATIONS</small>
+<h2 id="pageTitle">Command center</h2>
+</div>
+</div>
+<div class="topright">
+<span class="clock" id="clock">
+</span>
+<label class="rolebox">Acting role <select id="role">
+<option>Ward Coordinator</option>
+<option>Triage Nurse</option>
+<option>Clinical Team</option>
+<option>Administrator</option>
+</select>
+</label>
+<span class="avatar" id="avatar">WC</span>
+</div>
+</header>
+<div class="maincontent">
+<section class="page active" id="page-dashboard">
+<div class="pageintro">
+<div>
+<span class="kicker">LIVE OVERVIEW</span>
+<h1>Emergency command center</h1>
+<p>Priority, capacity and ward activity in one place.</p>
+</div>
+<div class="buttons">
+<button class="btn outline" id="quickExport">↓ Export data</button>
+<button class="btn primary" id="addPatient">＋ Register patient</button>
+</div>
+</div>
+<div class="alertbar">
+<b>⚕ Coordination support only</b>
+<span>Severity is entered by clinical staff. This system does not diagnose or make treatment decisions.</span>
+</div>
+<div class="stats" id="stats">
+</div>
+<div class="dashboardgrid">
+<div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Priority queue</h3>
+<p>Highest recorded urgency first</p>
+</div>
+<button class="btn textbtn" data-goto="patients">View queue →</button>
+</div>
+<div id="dashQueue">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Resource availability</h3>
+<p>Current capacity by category</p>
+</div>
+<button class="btn textbtn" data-goto="resources">Manage →</button>
+</div>
+<div class="panelbody" id="capacity">
+</div>
+</div>
+</div>
+<div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Critical cases</h3>
+<p>Level-one cases require review</p>
+</div>
+<span class="badge red" id="criticalBadge">0 cases</span>
+</div>
+<div class="panelbody" id="criticalList">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Recent activity</h3>
+<p>Latest audit events</p>
+</div>
+<button class="btn textbtn" data-goto="audit">All logs →</button>
+</div>
+<div class="panelbody" id="activity">
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="page" id="page-patients">
+<div class="pageintro">
+<div>
+<span class="kicker">PATIENT MANAGEMENT</span>
+<h1>Patient priority queue</h1>
+<p>Search, triage, update status and review requirements.</p>
+</div>
+<button class="btn primary" id="addPatient2">＋ Register patient</button>
+</div>
+<div class="panel">
+<div class="panelhead wrap">
+<div>
+<h3>Patient records</h3>
+<p>Queue updates immediately when severity or status changes.</p>
+</div>
+<div class="filters">
+<input id="patientSearch" placeholder="Search name or ID">
+<select id="statusFilter">
+<option value="">All statuses</option>
+<option>Waiting</option>
+<option>Assigned</option>
+<option>In treatment</option>
+<option>Paused</option>
+<option>Completed</option>
+<option>Cancelled</option>
+</select>
+<select id="severityFilter">
+<option value="">All severities</option>
+<option>Level 1 — Critical</option>
+<option>Level 2 — High</option>
+<option>Level 3 — Moderate</option>
+<option>Level 4 — Low</option>
+</select>
+</div>
+</div>
+<div id="patientsTable">
+</div>
+</div>
+</section>
+<section class="page" id="page-resources">
+<div class="pageintro">
+<div>
+<span class="kicker">CAPACITY MANAGEMENT</span>
+<h1>Ward resources</h1>
+<p>Manage rooms, clinical staff and equipment without double-booking.</p>
+</div>
+<button class="btn primary" id="addResource">＋ Add resource</button>
+</div>
+<div class="stats compact" id="resourceStats">
+</div>
+<div class="panel">
+<div class="panelhead wrap">
+<div>
+<h3>Resource inventory</h3>
+<p>Updates are checked against active assignments.</p>
+</div>
+<div class="filters">
+<input id="resourceSearch" placeholder="Search resource">
+<select id="resourceFilter">
+<option value="">All categories</option>
+<option>Trauma bay</option>
+<option>Operating theatre</option>
+<option>Surgeon</option>
+<option>Anaesthesiologist</option>
+<option>Equipment</option>
+</select>
+</div>
+</div>
+<div id="resourcesTable">
+</div>
+</div>
+</section>
+<section class="page" id="page-assignments">
+<div class="pageintro">
+<div>
+<span class="kicker">RESOURCE DISPATCH</span>
+<h1>Assignments</h1>
+<p>Review active allocations and find complete resource matches.</p>
+</div>
+</div>
+<div class="alertbar">
+<b>Assignment safety check</b>
+<span>All requested resource categories must be available; availability is rechecked on confirmation.</span>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Active assignments</h3>
+<p>Resources reserved by each case</p>
+</div>
+</div>
+<div id="activeAssignments">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Waiting patients & matching</h3>
+<p>Missing resource categories are listed before assignment.</p>
+</div>
+</div>
+<div id="matchQueue">
+</div>
+</div>
+</section>
+<section class="page" id="page-emergency">
+<div class="pageintro">
+<div>
+<span class="kicker">LEVEL-ONE TRAUMA WORKFLOW</span>
+<h1>Critical response</h1>
+<p>Surface resource conflicts and document authorised decisions.</p>
+</div>
+</div>
+<div class="alertbar dangerbar">
+<b>⚠ Pre-emption requires approval</b>
+<span>No elective procedure is automatically paused. Review, document and confirm with an authorised role.</span>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Critical cases</h3>
+<p>Current Level 1 patients and resource match status</p>
+</div>
+</div>
+<div id="criticalCases">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Pre-emption history</h3>
+<p>Approved actions, approver and documented reason</p>
+</div>
+</div>
+<div id="preemptionTable">
+</div>
+</div>
+</section>
+<section class="page" id="page-audit">
+<div class="pageintro">
+<div>
+<span class="kicker">ACCOUNTABILITY</span>
+<h1>Audit log</h1>
+<p>Timestamped record of significant system changes.</p>
+</div>
+<button class="btn outline" id="exportAudit">↓ Export CSV</button>
+</div>
+<div class="panel">
+<div class="panelhead wrap">
+<div>
+<h3>Activity records</h3>
+<p>Includes action, actor and affected records.</p>
+</div>
+<div class="filters">
+<input id="auditSearch" placeholder="Filter audit events">
+<select id="auditFilter">
+<option value="">All actions</option>
+</select>
+</div>
+</div>
+<div id="auditTable">
+</div>
+</div>
+</section>
+<section class="page" id="page-reports">
+<div class="pageintro">
+<div>
+<span class="kicker">OPERATIONAL INSIGHTS</span>
+<h1>Reports & analytics</h1>
+<p>Descriptive summaries of the current demo dataset — not clinical recommendations.</p>
+</div>
+<button class="btn outline" id="exportReport">↓ Export report CSV</button>
+</div>
+<div class="stats" id="reportStats">
+</div>
+<div class="reportgrid">
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Patient severity mix</h3>
+<p>All patient records by recorded severity</p>
+</div>
+</div>
+<div class="panelbody" id="severityChart">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Resource status mix</h3>
+<p>Configured inventory status</p>
+</div>
+</div>
+<div class="panelbody" id="resourceChart">
+</div>
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Operational summary</h3>
+<p>Counts are recalculated from current records.</p>
+</div>
+</div>
+<div class="panelbody" id="reportSummary">
+</div>
+</div>
+</section>
+<section class="page" id="page-settings">
+<div class="pageintro">
+<div>
+<span class="kicker">ADMINISTRATION</span>
+<h1>Settings & backup</h1>
+<p>Manage demo records and preserve a portable backup.</p>
+</div>
+</div>
+<div class="settingsgrid">
+<div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Data management</h3>
+<p>Browser-local storage</p>
+</div>
+</div>
+<div class="panelbody">
+<p class="muted">Records are saved in this browser profile. Use JSON export to make a backup before resetting or changing devices.</p>
+<div class="buttons">
+<button class="btn primary" id="backup">Export JSON backup</button>
+<button class="btn outline" id="importBtn">Import backup</button>
+<input hidden type="file" id="importFile" accept=".json,application/json">
+</div>
+<p id="storageInfo" class="muted">
+</p>
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Demo dataset</h3>
+<p>Fictional training records only</p>
+</div>
+</div>
+<div class="panelbody">
+<div class="buttons">
+<button class="btn outline" id="resetDemo">Reset demo data</button>
+<button class="btn danger" id="clearData">Clear all records</button>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>System status</h3>
+<p>Prototype capability checklist</p>
+</div>
+</div>
+<div class="panelbody" id="systemStatus">
+</div>
+</div>
+<div class="panel">
+<div class="panelhead">
+<div>
+<h3>Security & safety</h3>
+</div>
+</div>
+<div class="panelbody">
+<ul class="safetylist">
+<li>Clinical staff determine patient severity.</li>
+<li>Resource matching is a coordination aid.</li>
+<li>Critical pre-emption requires an authorised demo role and explicit confirmation.</li>
+<li>Active resource conflicts are blocked by application logic.</li>
+<li>Role selector is not real authentication.</li>
+<li>No backend, central database or multi-user synchronization is configured.</li>
+<li>Not approved for real patient care; do not enter real patient information.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer>WardFlow · Academic project · Not for clinical use</footer>
+</div>
+</main>
+</div>
+<div class="modalback" id="modalBack">
+<div class="modal">
+<div class="modalhead">
+<h2 id="modalTitle">Dialog</h2>
+<button class="iconbtn" id="closeModal">✕</button>
+</div>
+<div class="modalbody" id="modalBody">
+</div>
+<div class="modalfoot" id="modalFoot">
+</div>
+</div>
+</div>
+<div class="toastwrap" id="toasts">
+</div>
+<script src="supabase-config.js"></script>\n<script src="app.js">
+</script>
+</body>
+</html>
